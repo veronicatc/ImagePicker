@@ -686,6 +686,22 @@ public class MultiImageChooserActivity extends AppCompatActivity implements
         }
 	    
 	
+        private File storeOriginal(String fullPath, String fileName) throws IOException {
+            File orig = new File(fullPath);
+            int index = fileName.lastIndexOf('.');
+            String name = fileName.substring(0, index);
+            String ext = fileName.substring(index);
+            File file = File.createTempFile("tmp_" + name, ext);
+            FileInputStream inStream = new FileInputStream(orig);
+            FileOutputStream outStream = new FileOutputStream(file);
+            FileChannel inChannel = inStream.getChannel();
+            FileChannel outChannel = outStream.getChannel();
+            inChannel.transferTo(0, inChannel.size(), outChannel);
+            inStream.close();
+            outStream.close();
+
+            return file;
+        }
 	    
 
         private Bitmap getResizedBitmap(Bitmap bm, float factor) {
