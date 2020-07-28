@@ -79,6 +79,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.util.Log;
 
 public class MultiImageChooserActivity extends AppCompatActivity implements
         OnItemClickListener,
@@ -526,6 +527,7 @@ public class MultiImageChooserActivity extends AppCompatActivity implements
 		    File originalFile = new File(imageInfo.getKey());
 			
 		    if(useOriginal){
+			Log.d(TAG, 'Will call storeOriginal');
 			file = storeOriginal(imageInfo.getKey(), originalFile.getName());
 			al.add(Uri.fromFile(file).toString());
 		    }else{			
