@@ -141,7 +141,7 @@ public class MultiImageChooserActivity extends AppCompatActivity implements
         quality = getIntent().getIntExtra(QUALITY_KEY, 0);
         maxImageCount = maxImages;
         outputType = OutputType.fromValue(getIntent().getIntExtra(OUTPUT_TYPE_KEY, 0));
-	useOriginal = getIntent().getBooleanExtra(USE_ORIGINAL, false);
+	useOriginal = getIntent().getBooleanExtra(USE_ORIGINAL, true);
 
         Display display = getWindowManager().getDefaultDisplay();
         int width = display.getWidth();
