@@ -474,7 +474,7 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
         
         
             
-        [ self.imageManager requestImageForAsset:asset targetSize:PHImageManagerMaximumSize contentMode:PHImageContentModeDefault options:ph_options resultHandler:^(UIImage *result, NSDictionary *info) {
+        [ self.imageManager requestImageDataAndOrientationForAsset:asset options:ph_options resultHandler:^(UIImage *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
             
             //dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -505,17 +505,37 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
 //              if ( ![ UIImageJPEGRepresentation(result, 1.0f ) writeToFile:filePath atomically:YES ] ) {
 //                  return;
 //              }
-                
-                NSLog(@"original orientation: %ld",(UIImageOrientation)result.imageOrientation);
-                
-                UIImage *imageToDisplay = result.fixOrientation; //  UIImage+fixOrientation extension
-                
-                NSLog(@"corrected orientation: %ld",(UIImageOrientation)imageToDisplay.imageOrientation);
 
-                // setting compression to a low value (high compression) impact performance, but not actual img quality
-                if ( ![ UIImageJPEGRepresentation(imageToDisplay, 0.2f ) writeToFile:filePath atomically:YES ] ) {
+                CIImage* ciImage = [CIImage imageWithData:imageData];
+                NSMutableDictionary *metadataAsMutable = [ciImage.properties mutableCopy];
+                CGImageSourceRef source = Nil;
+                NSDictionary* sourceOptionsDict = [NSDictionary dictionaryWithObjectsAndKeys:dataUTI ,kCGImageSourceTypeIdentifierHint,nil];
+                source = CGImageSourceCreateWithData((__bridge CFDataRef) imageData,  (__bridge CFDictionaryRef) sourceOptionsDict);
+                //CFStringRef UTI = CGImageSourceGetType(source);
+                CFStringRef UTI = CFStringCreateWithCString(NULL,'public.jpeg',kCFStringEncodingMacRoman);
+                NSMutableData *dest_data = [NSMutableData data];
+                CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)dest_data,UTI,1,NULL);
+                CGImageDestinationAddImageFromSource(destination,source,0, (__bridge CFDictionaryRef) metadataAsMutable);
+                BOOL success = NO;
+                success = CGImageDestinationFinalize(destination);
+
+                if(!success) {
                     return;
                 }
+                [dest_data writeToFile:filePath atomically:YES];
+                CFRelease(destination);
+                CFRelease(source);                
+                
+                //NSLog(@"original orientation: %ld",(UIImageOrientation)result.imageOrientation);
+                
+                //UIImage *imageToDisplay = result.fixOrientation; //  UIImage+fixOrientation extension
+                
+                //NSLog(@"corrected orientation: %ld",(UIImageOrientation)imageToDisplay.imageOrientation);
+
+                // setting compression to a low value (high compression) impact performance, but not actual img quality
+                /*if ( ![ UIImageJPEGRepresentation(imageToDisplay, 0.2f ) writeToFile:filePath atomically:YES ] ) {
+                    return;
+                }*/
                 
                 fetch_item.image_fullsize = filePath;
                 fetch_item.be_saving_img = false;
