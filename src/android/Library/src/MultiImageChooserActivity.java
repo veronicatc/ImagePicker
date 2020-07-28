@@ -112,6 +112,7 @@ public class MultiImageChooserActivity extends AppCompatActivity implements
     private int desiredWidth;
     private int desiredHeight;
     private int quality;
+    private boolean useOriginal;
     private OutputType outputType;
 
     private final ImageFetcher fetcher = new ImageFetcher();
