@@ -520,61 +520,68 @@ public class MultiImageChooserActivity extends AppCompatActivity implements
                 while (i.hasNext()) {
                     Entry<String, Integer> imageInfo = i.next();
                     File file = new File(imageInfo.getKey());
-                    int rotate = imageInfo.getValue();
-                    BitmapFactory.Options options = new BitmapFactory.Options();
-                    options.inSampleSize = 1;
-                    options.inJustDecodeBounds = true;
-                    BitmapFactory.decodeFile(file.getAbsolutePath(), options);
-                    int width = options.outWidth;
-                    int height = options.outHeight;
-                    float scale = calculateScale(width, height);
+		    File originalFile = new File(imageInfo.getKey());
+			
+		    if(useOriginal){
+			file = storeOriginal(imageInfo.getKey(), originalFile.getName());
+			al.add(Uri.fromFile(file).toString());
+		    }else{			
+			int rotate = imageInfo.getValue();
+                    	BitmapFactory.Options options = new BitmapFactory.Options();
+                    	options.inSampleSize = 1;
+                    	options.inJustDecodeBounds = true;
+                    	BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+                    	int width = options.outWidth;
+                    	int height = options.outHeight;
+                    	float scale = calculateScale(width, height);
 
-                    if (scale < 1) {
-                        int finalWidth = (int)(width * scale);
-                        int finalHeight = (int)(height * scale);
-                        int inSampleSize = calculateInSampleSize(options, finalWidth, finalHeight);
-                        options = new BitmapFactory.Options();
-                        options.inSampleSize = inSampleSize;
+                    	if (scale < 1) {
+                        	int finalWidth = (int)(width * scale);
+                        	int finalHeight = (int)(height * scale);
+                        	int inSampleSize = calculateInSampleSize(options, finalWidth, finalHeight);
+                        	options = new BitmapFactory.Options();
+                        	options.inSampleSize = inSampleSize;
 
-                        try {
-                            bmp = this.tryToGetBitmap(file, options, rotate, true);
-                        } catch (OutOfMemoryError e) {
-                            options.inSampleSize = calculateNextSampleSize(options.inSampleSize);
-                            try {
-                                bmp = this.tryToGetBitmap(file, options, rotate, false);
-                            } catch (OutOfMemoryError e2) {
-                                throw new IOException("Unable to load image into memory.");
-                            }
-                        }
-                    } else {
-                        try {
-                            bmp = this.tryToGetBitmap(file, null, rotate, false);
-                        } catch(OutOfMemoryError e) {
-                            options = new BitmapFactory.Options();
-                            options.inSampleSize = 2;
+                        	try {
+                            		bmp = this.tryToGetBitmap(file, options, rotate, true);
+                        	} catch (OutOfMemoryError e) {
+                            		options.inSampleSize = calculateNextSampleSize(options.inSampleSize);
+                            		try {
+                                		bmp = this.tryToGetBitmap(file, options, rotate, false);
+                            		} catch (OutOfMemoryError e2) {
+                                		throw new IOException("Unable to load image into memory.");
+                            		}
+                        	}
+                    	} else {
+                        	try {
+                            		bmp = this.tryToGetBitmap(file, null, rotate, false);
+                        	} catch(OutOfMemoryError e) {
+                            		options = new BitmapFactory.Options();
+                            		options.inSampleSize = 2;
 
-                            try {
-                                bmp = this.tryToGetBitmap(file, options, rotate, false);
-                            } catch(OutOfMemoryError e2) {
-                                options = new BitmapFactory.Options();
-                                options.inSampleSize = 4;
+                            		try {
+                                		bmp = this.tryToGetBitmap(file, options, rotate, false);
+                            		} catch(OutOfMemoryError e2) {
+                                		options = new BitmapFactory.Options();
+                                		options.inSampleSize = 4;
 
-                                try {
-                                    bmp = this.tryToGetBitmap(file, options, rotate, false);
-                                } catch (OutOfMemoryError e3) {
-                                    throw new IOException("Unable to load image into memory.");
-                                }
-                            }
-                        }
-                    }
+                                		try {
+                                    			bmp = this.tryToGetBitmap(file, options, rotate, false);
+                                		} catch (OutOfMemoryError e3) {
+                                    			throw new IOException("Unable to load image into memory.");
+                                		}
+                            		}
+                        	}
+                    	}
 
-                    if (outputType == OutputType.FILE_URI) {
-                        file = storeImage(bmp, file.getName());
-                        al.add(Uri.fromFile(file).toString());
+                    	if (outputType == OutputType.FILE_URI) {
+                        	file = storeImage(bmp, file.getName());
+                        	al.add(Uri.fromFile(file).toString());
 
-                    } else if (outputType == OutputType.BASE64_STRING) {
-                        al.add(getBase64OfImage(bmp));
-                    }
+                    	} else if (outputType == OutputType.BASE64_STRING) {
+                        	al.add(getBase64OfImage(bmp));
+                    	}
+		    }				 
                 }
                 return al;
             } catch (IOException e) {
@@ -677,6 +684,9 @@ public class MultiImageChooserActivity extends AppCompatActivity implements
             outStream.close();
             return file;
         }
+	    
+	
+	    
 
         private Bitmap getResizedBitmap(Bitmap bm, float factor) {
             int width = bm.getWidth();
