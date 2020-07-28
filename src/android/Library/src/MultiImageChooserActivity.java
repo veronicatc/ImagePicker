@@ -90,6 +90,7 @@ public class MultiImageChooserActivity extends AppCompatActivity implements
     public static final String HEIGHT_KEY = "HEIGHT";
     public static final String QUALITY_KEY = "QUALITY";
     public static final String OUTPUT_TYPE_KEY = "OUTPUT_TYPE";
+    public static final String USE_ORIGINAL = "USE_ORIGINAL";
 
     private ImageAdapter ia;
 
@@ -136,6 +137,7 @@ public class MultiImageChooserActivity extends AppCompatActivity implements
         quality = getIntent().getIntExtra(QUALITY_KEY, 0);
         maxImageCount = maxImages;
         outputType = OutputType.fromValue(getIntent().getIntExtra(OUTPUT_TYPE_KEY, 0));
+	useOriginal = getIntent().getBooleanExtra(USE_ORIGINAL, false);
 
         Display display = getWindowManager().getDefaultDisplay();
         int width = display.getWidth();
