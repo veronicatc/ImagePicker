@@ -527,7 +527,7 @@ public class MultiImageChooserActivity extends AppCompatActivity implements
 		    File originalFile = new File(imageInfo.getKey());
 			
 		    if(useOriginal){
-			Log.d(TAG, 'Will call storeOriginal');
+			Log.d(TAG, "Will call storeOriginal");
 			file = storeOriginal(imageInfo.getKey(), originalFile.getName());
 			al.add(Uri.fromFile(file).toString());
 		    }else{			
