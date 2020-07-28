@@ -179,6 +179,7 @@ public class MultiImageChooserActivity extends AppCompatActivity implements
         ia = new ImageAdapter();
         gridView.setAdapter(ia);
 
+	Log.d(TAG, "onCreate before loadermanager");
         LoaderManager.enableDebugLogging(false);
         getLoaderManager().initLoader(CURSORLOADER_THUMBS, null, this);
         getLoaderManager().initLoader(CURSORLOADER_REAL, null, this);
@@ -187,6 +188,7 @@ public class MultiImageChooserActivity extends AppCompatActivity implements
         progress = new ProgressDialog(this);
         progress.setTitle(getString(fakeR.getId("string", "multi_image_picker_processing_images_title")));
         progress.setMessage(getString(fakeR.getId("string", "multi_image_picker_processing_images_message")));
+	Log.d(TAG, "onCreate ended");    
     }
 
     @Override
@@ -531,6 +533,7 @@ public class MultiImageChooserActivity extends AppCompatActivity implements
 			file = storeOriginal(imageInfo.getKey(), originalFile.getName());
 			al.add(Uri.fromFile(file).toString());
 		    }else{			
+			Log.d(TAG, "Not using storeOriginal");    
 			int rotate = imageInfo.getValue();
                     	BitmapFactory.Options options = new BitmapFactory.Options();
                     	options.inSampleSize = 1;
