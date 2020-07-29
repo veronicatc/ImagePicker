@@ -523,7 +523,7 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
                 if(!success) {
                     return NO;
                 }
-                [dest_data writeToFile:filePath atomically:YES];
+                [(__bridge NSData*)dest_data writeToFile:filePath atomically:YES];
                 CFRelease(destination);
                 CFRelease(source);                
                 
