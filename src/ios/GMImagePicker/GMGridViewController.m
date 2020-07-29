@@ -474,7 +474,7 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
         
         
             
-        [ self.imageManager requestImageDataAndOrientationForAsset:asset options:ph_options resultHandler:^(UIImage *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+        [ [self.imageManager] requestImageDataForAsset:asset options:ph_options resultHandler:^(UIImage *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
             
             //dispatch_async(dispatch_get_main_queue(), ^{
             
@@ -521,7 +521,7 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
                 success = CGImageDestinationFinalize(destination);
 
                 if(!success) {
-                    return;
+                    return NO;
                 }
                 [dest_data writeToFile:filePath atomically:YES];
                 CFRelease(destination);
