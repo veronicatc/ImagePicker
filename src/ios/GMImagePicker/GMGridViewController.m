@@ -513,7 +513,7 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
                 source = CGImageSourceCreateWithData((__bridge CFDataRef) imageData,  (__bridge CFDictionaryRef) sourceOptionsDict);
                 //CFStringRef UTI = CGImageSourceGetType(source);
                 CFStringRef UTI = CFStringCreateWithCString(NULL,'public.jpeg',kCFStringEncodingMacRoman);
-                CFMutableDataRef *dest_data = CFDataCreateMutable(NULL,0);
+                CFMutableDataRef dest_data = CFDataCreateMutable(NULL,0);
                 //CGImageDestinationRef destination = CGImageDestinationCreateWithData((__bridge CFMutableDataRef)dest_data,UTI,1,NULL);
                 CGImageDestinationRef destination = CGImageDestinationCreateWithData(dest_data,UTI,1,NULL);
                 CGImageDestinationAddImageFromSource(destination,source,0, (__bridge CFDictionaryRef) metadataAsMutable);
