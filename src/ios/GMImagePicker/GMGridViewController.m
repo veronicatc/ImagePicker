@@ -521,7 +521,7 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
                 success = CGImageDestinationFinalize(destination);
 
                 if(!success) {
-                    return NO;
+                    return;
                 }
                 [(__bridge NSData*)dest_data writeToFile:filePath atomically:YES];
                 CFRelease(destination);
@@ -553,7 +553,6 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
                     [ collectionView selectItemAtIndexPath:indexPath animated:NO scrollPosition:UICollectionViewScrollPositionNone ];
                     [ self collectionView:collectionView didSelectItemAtIndexPath:indexPath ];
                 });
-                
             });
             //});
             
