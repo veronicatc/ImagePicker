@@ -474,7 +474,7 @@ NSString * const GMGridViewCellIdentifier = @"GMGridViewCellIdentifier";
         
         
             
-        [ [self.imageManager] requestImageDataForAsset:asset options:ph_options resultHandler:^(UIImage *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
+        [ [self.imageManager] requestImageDataForAsset:asset options:ph_options resultHandler:^(NSData *imageData, NSString *dataUTI, UIImageOrientation orientation, NSDictionary *info) {
             
             //dispatch_async(dispatch_get_main_queue(), ^{
             
